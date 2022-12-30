@@ -1,5 +1,5 @@
 <template>
-    <article class="flex items-center justify-center pt-[140px]">
+    <article class="flex items-center justify-center pb-[240px]">
         <div class="flex flex-col items-center space-y-6 text-center">
             <h2 class="text-[48px] font-bold text-neutral-800">
                 Daftarkan pengajuan magangmu <br />
@@ -32,7 +32,8 @@
 </template>
 
 <script setup lang="ts">
-import { CloudArrowUpIcon, ClipboardDocumentCheckIcon } from '@heroicons/vue/24/outline';
+import { ClipboardDocumentCheckIcon } from '@heroicons/vue/24/outline';
+import { CloudArrowUpIcon } from '@heroicons/vue/24/solid';
 </script>
 
 <style scoped>
