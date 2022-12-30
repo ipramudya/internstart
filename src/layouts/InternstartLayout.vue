@@ -10,17 +10,21 @@
                 </div>
                 <div class="flex space-x-4">
                     <RouterLink to="/" exact-active-class="font-medium">
-                        <p class="font-medium text-neutral-700">Beranda</p>
+                        <p class="font-medium text-neutral-600">Beranda</p>
                     </RouterLink>
                     <RouterLink to="/submission" exact-active-class="font-medium">
-                        <p class="text-neutral-700">Pengajuan</p>
+                        <p class="text-neutral-600">Pengajuan</p>
                     </RouterLink>
                     <RouterLink to="/repporting" exact-active-class="font-medium">
-                        <p class="text-neutral-700">Cek Laporan</p>
+                        <p class="text-neutral-600">Pelaporan</p>
                     </RouterLink>
                 </div>
             </div>
-            <el-button class="ease-transition bg-sky-500 !text-white hover:bg-sky-600">
+            <el-button
+                plain
+                class="ease-transition rounded-md border border-sky-500 text-sky-600 hover:border-sky-400 hover:text-sky-400"
+                :icon="ArrowRightOnRectangleIcon"
+            >
                 <span class="font-normal">Masuk sebagai admin</span>
             </el-button>
         </header>
@@ -33,6 +37,11 @@
 
 <script setup lang="ts">
 import Logo from '@/assets/logo.svg';
+import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/outline';
 </script>
 
-<style scoped></style>
+<style scoped>
+.el-button :deep(.el-icon) {
+    font-size: 1rem;
+}
+</style>

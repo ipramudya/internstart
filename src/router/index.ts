@@ -7,7 +7,11 @@ const router = createRouter({
             path: '/',
             component: import('../layouts/InternstartLayout.vue'),
             children: [
-                { path: '', name: 'landing', component: import('../views/LandingView.vue') },
+                {
+                    path: '',
+                    name: 'landing',
+                    component: import('../views/Landing/LandingView.vue'),
+                },
             ],
         },
         {
