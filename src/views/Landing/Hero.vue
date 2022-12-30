@@ -10,14 +10,16 @@
                 melakukan program magang atau praktik kerja lainnya.
             </p>
             <div class="flex items-center space-x-4">
-                <el-button
-                    plain
-                    size="large"
-                    :icon="CloudArrowUpIcon"
-                    class="ease-transition rounded-md !bg-sky-500 !text-white hover:!bg-sky-400"
-                >
-                    Ajukan Laporan
-                </el-button>
+                <router-link to="submission">
+                    <el-button
+                        plain
+                        size="large"
+                        :icon="CloudArrowUpIcon"
+                        class="ease-transition rounded-md !bg-sky-500 !text-white hover:!bg-sky-400"
+                    >
+                        Ajukan Laporan
+                    </el-button>
+                </router-link>
                 <el-button
                     plain
                     size="large"

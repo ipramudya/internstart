@@ -1,9 +1,7 @@
 <template>
     <div class="flex w-full justify-center">
-        <div
-            class="flex min-w-[546px] flex-col space-y-6 divide-y divide-dashed divide-neutral-300"
-        >
-            <div v-for="(_, idx) in formFields" :key="`member-${idx}`" class="flex flex-col pt-6">
+        <div class="flex min-w-[546px] flex-col space-y-6">
+            <div v-for="(_, idx) in memberFields" :key="`member-${idx}`" class="flex flex-col">
                 <!-- label -->
                 <div class="mb-4 flex items-center justify-between">
                     <div class="flex">
@@ -20,6 +18,7 @@
                         <XCircleIcon class="h-6 w-6" />
                     </button>
                 </div>
+                <!-- fields -->
                 <div class="flex flex-col space-y-2">
                     <!-- name -->
                     <div class="space-y-1">
@@ -29,7 +28,7 @@
                         <el-input
                             size="large"
                             :id="`member-${idx}-nama`"
-                            v-model="formFields[idx].name"
+                            v-model="memberFields[idx].name"
                             placeholder="Masukan nama..."
                         />
                     </div>
@@ -41,7 +40,7 @@
                         <el-input
                             size="large"
                             :id="`member-${idx}-npm`"
-                            v-model="formFields[idx].npm"
+                            v-model="memberFields[idx].npm"
                             placeholder="Masukan npm..."
                         />
                     </div>
@@ -53,7 +52,7 @@
                         <el-input
                             size="large"
                             :id="`member-${idx}-grade`"
-                            v-model="formFields[idx].grade"
+                            v-model="memberFields[idx].grade"
                             placeholder="Masukan tahun angkatan..."
                         />
                     </div>
@@ -66,12 +65,13 @@
                             type="email"
                             size="large"
                             :id="`member-${idx}-email`"
-                            v-model="formFields[idx].email"
+                            v-model="memberFields[idx].email"
                             placeholder="Masukan email yang valid..."
                         />
                     </div>
                 </div>
             </div>
+            <!-- action button -->
             <div class="w-full">
                 <el-divider>
                     <button
@@ -82,14 +82,55 @@
                         <span>Tambah anggota kelompok</span>
                     </button>
                 </el-divider>
-                <el-button
-                    plain
-                    :icon="CloudArrowUpIcon"
-                    class="ease-transition rounded-md !bg-sky-500 !text-white hover:!bg-sky-400"
-                >
-                    Ajukan Laporan
-                </el-button>
             </div>
+            <!-- company -->
+            <div class="flex flex-col">
+                <div class="mb-4 flex items-center justify-between">
+                    <div class="flex">
+                        <span class="mr-3 font-bold text-sky-600"
+                            >0{{ memberFields.length + 1 }}</span
+                        >
+                        <p class="font-medium text-neutral-800">
+                            Data Perusahaan dan Upload Berkas
+                        </p>
+                    </div>
+                </div>
+                <div class="flex flex-col space-y-2">
+                    <!-- company name -->
+                    <div class="space-y-1">
+                        <label for="company-name" class="text-sm text-neutral-600"
+                            >Nama Perusahaan</label
+                        >
+                        <el-input
+                            size="large"
+                            id="company-nama"
+                            v-model="companyFields.name"
+                            placeholder="Masukan nama perusahaan..."
+                        />
+                    </div>
+                    <!-- address name -->
+                    <div class="space-y-1">
+                        <label for="company-name" class="text-sm text-neutral-600"
+                            >Alamat Perusahaan</label
+                        >
+                        <el-input
+                            type="textarea"
+                            size="large"
+                            id="company-nama"
+                            v-model="companyFields.name"
+                            placeholder="Masukan alamat perusahaan..."
+                            class="min-h-[120px]"
+                        />
+                    </div>
+                </div>
+            </div>
+            <el-button
+                plain
+                :icon="CloudArrowUpIcon"
+                class="ease-transition w-fit rounded-md !bg-sky-500 !text-white hover:!bg-sky-400"
+            >
+                Ajukan Laporan
+            </el-button>
         </div>
     </div>
 </template>
@@ -105,13 +146,14 @@ export type Fields = {
     grade: string;
     email: string;
 };
-const formFields = reactive([{ name: '', npm: '', grade: '', email: '' }]);
+const memberFields = reactive([{ name: '', npm: '', grade: '', email: '' }]);
+const companyFields = reactive({ name: '', address: '', coverLetter: '', responseLetter: '' });
 
 const onIncrementTotalMember = () => {
-    formFields.push({ name: '', npm: '', grade: '', email: '' });
+    memberFields.push({ name: '', npm: '', grade: '', email: '' });
 };
 const onFindAndDeleteMember = (idx: number) => {
-    formFields.splice(idx, 1);
+    memberFields.splice(idx, 1);
 };
 </script>
 
@@ -121,5 +163,8 @@ const onFindAndDeleteMember = (idx: number) => {
 }
 .el-button :deep(.el-icon) {
     @apply text-[20px];
+}
+.el-textarea :deep(textarea) {
+    @apply !min-h-[120px];
 }
 </style>
