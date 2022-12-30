@@ -14,7 +14,7 @@
                     plain
                     size="large"
                     :icon="CloudArrowUpIcon"
-                    class="ease-transition rounded-md bg-sky-500 !text-white hover:bg-sky-400"
+                    class="ease-transition rounded-md !bg-sky-500 !text-white hover:!bg-sky-400"
                 >
                     Ajukan Laporan
                 </el-button>
@@ -22,7 +22,7 @@
                     plain
                     size="large"
                     :icon="ClipboardDocumentCheckIcon"
-                    class="ease-transition rounded-md border border-neutral-300 text-neutral-700 hover:border-sky-500 hover:bg-sky-50 hover:text-sky-500"
+                    class="ease-transition rounded-md border !border-neutral-300 !text-neutral-700 hover:!border-sky-500 hover:!bg-sky-50 hover:!text-sky-500"
                 >
                     Cek Laporan Magang
                 </el-button>

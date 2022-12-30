@@ -21,7 +21,7 @@
         </div>
         <el-button
             plain
-            class="ease-transition rounded-md border border-sky-500 text-sky-600 hover:border-sky-400 hover:text-sky-400"
+            class="ease-transition rounded-md border !border-sky-500 !text-sky-600 hover:!border-sky-400 hover:!text-sky-400"
             :icon="ArrowRightOnRectangleIcon"
         >
             <span class="font-normal">Masuk sebagai admin</span>
