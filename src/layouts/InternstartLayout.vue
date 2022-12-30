@@ -1,11 +1,11 @@
 <template>
-    <main class="mx-auto max-w-7xl">
+    <div class="mx-auto max-w-7xl">
         <Header />
-        <main>
+        <main class="flex flex-col py-[160px]">
             <RouterView />
         </main>
         <Footer />
-    </main>
+    </div>
 </template>
 
 <script setup lang="ts">

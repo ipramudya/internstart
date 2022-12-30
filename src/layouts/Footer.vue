@@ -1,6 +1,6 @@
 <template>
     <footer class="flex flex-col">
-        <div class="grid grid-cols-3 border-b border-neutral-300 pb-[100px]">
+        <div class="grid grid-cols-3 border-y border-neutral-300 pb-[100px] pt-[48px]">
             <div class="col-span-2 flex flex-col space-y-4">
                 <div class="flex items-center space-x-2">
                     <div class="aspect-square w-[32px]">

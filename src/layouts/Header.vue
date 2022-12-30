@@ -7,15 +7,15 @@
                 </div>
                 <h2 class="text-xl font-medium text-neutral-800">Internstart</h2>
             </div>
-            <div class="flex space-x-4">
+            <div class="flex space-x-6">
                 <RouterLink to="/" exact-active-class="font-medium">
-                    <p class="font-medium text-neutral-600">Beranda</p>
+                    <p class="link">Beranda</p>
                 </RouterLink>
                 <RouterLink to="/submission" exact-active-class="font-medium">
-                    <p class="text-neutral-600">Pengajuan</p>
+                    <p class="link">Pengajuan</p>
                 </RouterLink>
                 <RouterLink to="/repporting" exact-active-class="font-medium">
-                    <p class="text-neutral-600">Pelaporan</p>
+                    <p class="link">Pelaporan</p>
                 </RouterLink>
             </div>
         </div>
@@ -37,5 +37,11 @@ import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/outline';
 <style scoped>
 .el-button :deep(.el-icon) {
     font-size: 1rem;
+}
+</style>
+
+<style lang="postcss">
+.link {
+    @apply ease-transition text-neutral-600 underline-offset-2 hover:text-sky-600 hover:underline;
 }
 </style>

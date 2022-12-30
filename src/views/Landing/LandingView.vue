@@ -1,8 +1,6 @@
 <template>
-    <div class="flex flex-col py-[160px]">
-        <Hero />
-        <Flow />
-    </div>
+    <Hero />
+    <Flow />
 </template>
 
 <script setup lang="ts">

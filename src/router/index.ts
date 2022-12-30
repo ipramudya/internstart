@@ -12,6 +12,11 @@ const router = createRouter({
                     name: 'landing',
                     component: import('../views/Landing/LandingView.vue'),
                 },
+                {
+                    path: 'submission',
+                    name: 'submission',
+                    component: import('../views/Submission/SubmissionView.vue'),
+                },
             ],
         },
         {
