@@ -1,9 +1,11 @@
 <template>
-    <div>
-        <h1>submission</h1>
-    </div>
+    <SubmissionBanner />
+    <SubmissionForm />
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import SubmissionBanner from './SubmissionBanner.vue';
+import SubmissionForm from './SubmissionForm.vue';
+</script>
 
 <style scoped></style>
