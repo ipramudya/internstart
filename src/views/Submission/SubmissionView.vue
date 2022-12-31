@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import SubmissionBanner from './SubmissionBanner.vue';
-import SubmissionForm from './SubmissionForm.vue';
+import SubmissionForm from './Form/SubmissionForm.vue';
 </script>
 
 <style scoped></style>

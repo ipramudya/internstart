@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getStorage, ref } from 'firebase/storage';
+import { getFirestore } from 'firebase/firestore';
 
 const app = initializeApp({
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -12,5 +13,6 @@ const app = initializeApp({
 
 const storage = getStorage(app);
 const storageRef = ref(storage, 'pdfs');
+const db = getFirestore(app);
 
-export { storageRef };
+export { storageRef, db };
