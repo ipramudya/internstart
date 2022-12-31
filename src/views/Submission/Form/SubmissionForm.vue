@@ -78,6 +78,18 @@
                         label="Alamat Perusahaan"
                         input-type="textarea"
                     />
+                    <FileUpload
+                        :file-ref="internFiles.coverLetter"
+                        label="Unggah surat pengantar"
+                        @file-change="onUploadFile"
+                        id="coverLetter"
+                    />
+                    <FileUpload
+                        :file-ref="internFiles.responseLetter"
+                        label="Unggah surat balasan"
+                        @file-change="onUploadFile"
+                        id="responseLetter"
+                    />
                 </div>
             </div>
             <!-- submit button -->
@@ -97,18 +109,25 @@
 import { db } from '@/lib/firebase';
 import { PlusCircleIcon, XCircleIcon } from '@heroicons/vue/24/outline';
 import { CloudArrowUpIcon } from '@heroicons/vue/24/solid';
+import { ElButton, ElDivider } from 'element-plus';
 import { addDoc, collection } from 'firebase/firestore';
 import { reactive } from 'vue';
+import type { InternFiles, UploadHandlerParam } from './field.types';
+import FileUpload from './FileUpload.vue';
 import FormField from './FormField.vue';
 
 const memberFields = reactive([{ name: '', npm: '', grade: '', email: '' }]);
 const companyFields = reactive({ name: '', address: '', coverLetter: '', responseLetter: '' });
+const internFiles = reactive<InternFiles>({ coverLetter: null, responseLetter: null });
 
 const onIncrementTotalMember = () => {
     memberFields.push({ name: '', npm: '', grade: '', email: '' });
 };
 const onFindAndDeleteMember = (idx: number) => {
     memberFields.splice(idx, 1);
+};
+const onUploadFile = (event: UploadHandlerParam) => {
+    internFiles[event.slug] = new Blob([event.file[0]], { type: event.file[0].type });
 };
 const onSubmitSubmission = async () => {
     try {

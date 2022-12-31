@@ -4,3 +4,9 @@ export type Fields = {
     grade: string;
     email: string;
 };
+
+export type InternFiles = {
+    coverLetter: Blob | null;
+    responseLetter: Blob | null;
+};
+export type UploadHandlerParam = { file: FileList; slug: 'responseLetter' | 'coverLetter' };

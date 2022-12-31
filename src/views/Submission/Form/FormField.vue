@@ -37,6 +37,6 @@ const value = computed({
 
 <style scoped lang="postcss">
 .el-textarea :deep(textarea) {
-    @apply !min-h-[120px];
+    @apply !min-h-[120px] !px-[15px] pt-3;
 }
 </style>
