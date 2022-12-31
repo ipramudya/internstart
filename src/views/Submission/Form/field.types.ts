@@ -1,3 +1,5 @@
+import type { StorageReference } from 'firebase/storage';
+
 export type Fields = {
     name: string;
     npm: string;
@@ -6,7 +8,17 @@ export type Fields = {
 };
 
 export type InternFiles = {
-    coverLetter: Blob | null;
-    responseLetter: Blob | null;
+    coverLetter: {
+        file: Blob | null;
+        fileName: string;
+    };
+    responseLetter: {
+        file: Blob | null;
+        fileName: string;
+    };
+};
+export type UploadStorageRefs = {
+    coverLetterStorageRef: null | StorageReference;
+    responseLetterStorageRef: null | StorageReference;
 };
 export type UploadHandlerParam = { file: FileList; slug: 'responseLetter' | 'coverLetter' };

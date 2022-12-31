@@ -15,4 +15,4 @@ const storage = getStorage(app);
 const storageRef = ref(storage, 'pdfs');
 const db = getFirestore(app);
 
-export { storageRef, db };
+export { storageRef, db, storage };

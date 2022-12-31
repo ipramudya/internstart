@@ -98,6 +98,7 @@
                 :icon="CloudArrowUpIcon"
                 class="ease-transition w-fit rounded-md !bg-sky-500 !text-white hover:!bg-sky-400"
                 @click="onSubmitSubmission"
+                :loading="uploadLoading"
             >
                 Ajukan Laporan
             </el-button>
@@ -106,19 +107,29 @@
 </template>
 
 <script setup lang="ts">
-import { db } from '@/lib/firebase';
+import {
+    uploadBytes,
+    ref as firebaseStorageRef,
+    getDownloadURL,
+    type UploadResult,
+} from 'firebase/storage';
+import { storage, db } from '@/lib/firebase';
 import { PlusCircleIcon, XCircleIcon } from '@heroicons/vue/24/outline';
 import { CloudArrowUpIcon } from '@heroicons/vue/24/solid';
 import { ElButton, ElDivider } from 'element-plus';
 import { addDoc, collection } from 'firebase/firestore';
-import { reactive } from 'vue';
-import type { InternFiles, UploadHandlerParam } from './field.types';
+import { reactive, ref } from 'vue';
+import type { InternFiles, UploadHandlerParam, UploadStorageRefs } from './field.types';
 import FileUpload from './FileUpload.vue';
 import FormField from './FormField.vue';
 
+const uploadLoading = ref(false);
 const memberFields = reactive([{ name: '', npm: '', grade: '', email: '' }]);
-const companyFields = reactive({ name: '', address: '', coverLetter: '', responseLetter: '' });
-const internFiles = reactive<InternFiles>({ coverLetter: null, responseLetter: null });
+const companyFields = reactive({ name: '', address: '' });
+const internFiles = reactive<InternFiles>({
+    coverLetter: { file: null, fileName: '' },
+    responseLetter: { file: null, fileName: '' },
+});
 
 const onIncrementTotalMember = () => {
     memberFields.push({ name: '', npm: '', grade: '', email: '' });
@@ -127,17 +138,70 @@ const onFindAndDeleteMember = (idx: number) => {
     memberFields.splice(idx, 1);
 };
 const onUploadFile = (event: UploadHandlerParam) => {
-    internFiles[event.slug] = new Blob([event.file[0]], { type: event.file[0].type });
+    internFiles[event.slug].file = new Blob([event.file[0]], { type: event.file[0].type });
+    internFiles[event.slug].fileName = event.file[0].name.replace(/\s+/g, '_');
 };
 const onSubmitSubmission = async () => {
     try {
-        const docRef = await addDoc(collection(db, 'students'), {
-            internship_group: { ...memberFields },
-            company_partner: { ...companyFields },
+        // declare vars
+        uploadLoading.value = true;
+        let uploadStorageRef: UploadStorageRefs = {
+            coverLetterStorageRef: null as any,
+            responseLetterStorageRef: null as any,
+        };
+
+        // creating storage ref
+        (Object.keys(internFiles) as (keyof InternFiles)[]).forEach((internFile) => {
+            uploadStorageRef[`${internFile}StorageRef`] = firebaseStorageRef(
+                storage,
+                `${memberFields[0].npm ?? 'temp'}/${internFiles[internFile].fileName}`
+            );
         });
-        console.log(docRef);
+
+        // creating upload bytes promises to solve
+        let beforeUploadPromises: any[] = [];
+        (Object.keys(internFiles) as (keyof InternFiles)[]).forEach((upload) => {
+            beforeUploadPromises.push(
+                uploadBytes(
+                    uploadStorageRef[`${upload}StorageRef`] as NonNullable<
+                        UploadStorageRefs[`${typeof upload}StorageRef`]
+                    >,
+                    internFiles[upload].file as Blob
+                )
+            );
+        });
+        const uploadResult = await Promise.all<UploadResult>(beforeUploadPromises);
+
+        // get download url promises
+        let beforeGetDownloadURL: any[] = [];
+        uploadResult.forEach((result) => {
+            beforeGetDownloadURL.push(getDownloadURL(result.ref));
+        });
+        const downloadURL = await Promise.all<string>(beforeGetDownloadURL);
+
+        // store to firestore
+        await addDoc(collection(db, 'students'), {
+            lead: memberFields[0].name,
+            npm: memberFields[0].npm,
+            group: { ...memberFields },
+            partner: {
+                ...companyFields,
+                files: {
+                    coverLetter: {
+                        fileName: internFiles.coverLetter.fileName,
+                        url: downloadURL[0],
+                    },
+                    responseLetter: {
+                        fileName: internFiles.responseLetter.fileName,
+                        url: downloadURL[1],
+                    },
+                },
+            },
+        });
     } catch (error: unknown) {
         console.log(error);
+    } finally {
+        uploadLoading.value = false;
     }
 };
 </script>
