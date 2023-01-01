@@ -1,12 +1,15 @@
 import type { StorageReference } from 'firebase/storage';
 
-export type Fields = {
+export type Member = {
     name: string;
     npm: string;
     grade: string;
     email: string;
 };
-
+export type Company = {
+    name: string;
+    address: string;
+};
 export type InternFiles = {
     coverLetter: {
         file: Blob | null;

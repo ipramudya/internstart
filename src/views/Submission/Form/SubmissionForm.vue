@@ -109,19 +109,12 @@
 </template>
 
 <script setup lang="ts">
-import {
-    uploadBytes,
-    ref as firebaseStorageRef,
-    getDownloadURL,
-    type UploadResult,
-} from 'firebase/storage';
-import { storage, db } from '@/lib/firebase';
 import { PlusCircleIcon, XCircleIcon } from '@heroicons/vue/24/outline';
 import { CloudArrowUpIcon } from '@heroicons/vue/24/solid';
 import { ElMessage } from 'element-plus';
-import { addDoc, collection } from 'firebase/firestore';
 import { reactive, ref } from 'vue';
-import type { InternFiles, UploadHandlerParam, UploadStorageRefs } from './field.types';
+import createSubmissionService from './create-submission.service';
+import type { InternFiles, UploadHandlerParam } from './field.types';
 import FileUpload from './FileUpload.vue';
 import FormField from './FormField.vue';
 
@@ -147,58 +140,10 @@ const onSubmitSubmission = async () => {
     try {
         // declare vars
         uploadLoading.value = true;
-        let uploadStorageRef: UploadStorageRefs = {
-            coverLetterStorageRef: null as any,
-            responseLetterStorageRef: null as any,
-        };
-
-        // creating storage ref
-        (Object.keys(internFiles) as (keyof InternFiles)[]).forEach((internFile) => {
-            uploadStorageRef[`${internFile}StorageRef`] = firebaseStorageRef(
-                storage,
-                `${memberFields[0].npm ?? 'temp'}/${internFiles[internFile].fileName}`
-            );
-        });
-
-        // creating upload bytes promises to solve
-        let beforeUploadPromises: any[] = [];
-        (Object.keys(internFiles) as (keyof InternFiles)[]).forEach((upload) => {
-            beforeUploadPromises.push(
-                uploadBytes(
-                    uploadStorageRef[`${upload}StorageRef`] as NonNullable<
-                        UploadStorageRefs[`${typeof upload}StorageRef`]
-                    >,
-                    internFiles[upload].file as Blob
-                )
-            );
-        });
-        const uploadResult = await Promise.all<UploadResult>(beforeUploadPromises);
-
-        // get download url promises
-        let beforeGetDownloadURL: any[] = [];
-        uploadResult.forEach((result) => {
-            beforeGetDownloadURL.push(getDownloadURL(result.ref));
-        });
-        const downloadURL = await Promise.all<string>(beforeGetDownloadURL);
-
-        // store to firestore
-        await addDoc(collection(db, 'students'), {
-            lead: memberFields[0].name,
-            npm: memberFields[0].npm,
-            group: { ...memberFields },
-            partner: {
-                ...companyFields,
-                files: {
-                    coverLetter: {
-                        fileName: internFiles.coverLetter.fileName,
-                        url: downloadURL[0],
-                    },
-                    responseLetter: {
-                        fileName: internFiles.responseLetter.fileName,
-                        url: downloadURL[1],
-                    },
-                },
-            },
+        await createSubmissionService({
+            files: internFiles,
+            company: companyFields,
+            member: memberFields,
         });
         ElMessage({
             message: 'Berkas berhasil terkirim...',
