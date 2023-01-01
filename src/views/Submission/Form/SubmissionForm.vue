@@ -29,11 +29,13 @@
                         v-model="memberFields[idx].npm"
                         placeholder="Masukan nomor pokok mahasiswa..."
                         label="NPM"
+                        input-type="number"
                     />
                     <FormField
                         v-model="memberFields[idx].grade"
                         placeholder="Masukan tahun angkatan..."
                         label="Angkatan"
+                        input-type="number"
                     />
                     <FormField
                         v-model="memberFields[idx].email"
@@ -116,7 +118,7 @@ import {
 import { storage, db } from '@/lib/firebase';
 import { PlusCircleIcon, XCircleIcon } from '@heroicons/vue/24/outline';
 import { CloudArrowUpIcon } from '@heroicons/vue/24/solid';
-import { ElButton, ElDivider } from 'element-plus';
+import { ElMessage } from 'element-plus';
 import { addDoc, collection } from 'firebase/firestore';
 import { reactive, ref } from 'vue';
 import type { InternFiles, UploadHandlerParam, UploadStorageRefs } from './field.types';
@@ -198,11 +200,35 @@ const onSubmitSubmission = async () => {
                 },
             },
         });
+        ElMessage({
+            message: 'Berkas berhasil terkirim...',
+            type: 'success',
+            showClose: true,
+        });
+        clearForm();
     } catch (error: unknown) {
-        console.log(error);
+        ElMessage({
+            message: 'Gagal menambahkan berkas, silahkan coba kembali...',
+            type: 'error',
+            showClose: true,
+        });
     } finally {
         uploadLoading.value = false;
     }
+};
+const clearForm = () => {
+    memberFields.forEach((field) => {
+        field.name = '';
+        field.email = '';
+        field.grade = '';
+        field.npm = '';
+    });
+    companyFields.name = '';
+    companyFields.address = '';
+    internFiles.coverLetter.file = null;
+    internFiles.coverLetter.fileName = '';
+    internFiles.responseLetter.file = null;
+    internFiles.responseLetter.fileName = '';
 };
 </script>
 

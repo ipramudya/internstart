@@ -20,7 +20,7 @@ const props = withDefaults(
         modelValue: any;
         label: string;
         placeholder: string;
-        inputType?: 'text' | 'textarea';
+        inputType?: 'text' | 'textarea' | 'number';
     }>(),
     { inputType: 'text' }
 );
