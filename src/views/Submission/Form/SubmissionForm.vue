@@ -1,3 +1,84 @@
+<script setup lang="ts">
+import { PlusCircleIcon, XCircleIcon } from '@heroicons/vue/24/outline';
+import { CloudArrowUpIcon } from '@heroicons/vue/24/solid';
+import { ElMessage } from 'element-plus';
+import { reactive, ref } from 'vue';
+import createSubmissionService from './create-submission.service';
+import type { InternFiles, UploadHandlerParam } from './field.types';
+import FileUpload from './FileUpload.vue';
+import FormField from './FormField.vue';
+import schema from './schema-validation';
+
+const uploadLoading = ref(false);
+const memberFields = reactive([{ name: '', npm: '', grade: '', email: '' }]);
+const companyFields = reactive({ name: '', address: '' });
+const internFiles = reactive<InternFiles>({
+    coverLetter: { file: null, fileName: '' },
+    responseLetter: { file: null, fileName: '' },
+});
+
+const onIncrementTotalMember = () => {
+    memberFields.push({ name: '', npm: '', grade: '', email: '' });
+};
+const onFindAndDeleteMember = (idx: number) => {
+    memberFields.splice(idx, 1);
+};
+const onUploadFile = (event: UploadHandlerParam) => {
+    internFiles[event.slug].file = new Blob([event.file[0]], { type: event.file[0].type });
+    internFiles[event.slug].fileName = event.file[0].name.replace(/\s+/g, '_');
+};
+
+const onSubmitSubmission = async () => {
+    try {
+        schema.validateSync(
+            {
+                member: memberFields,
+                company: companyFields,
+                files: internFiles,
+            },
+            { abortEarly: false }
+        );
+        uploadLoading.value = true;
+        await createSubmissionService({
+            files: internFiles,
+            company: companyFields,
+            member: memberFields,
+        });
+        ElMessage({
+            message: 'Berkas berhasil terkirim...',
+            type: 'success',
+            showClose: true,
+        });
+        clearForm();
+    } catch (error: any) {
+        ElMessage({
+            message:
+                error.inner.length !== 0
+                    ? error.inner[0].message
+                    : 'Gagal menambahkan berkas, silahkan coba kembali...',
+            type: 'error',
+            showClose: true,
+        });
+    } finally {
+        uploadLoading.value = false;
+    }
+};
+const clearForm = () => {
+    memberFields.forEach((field) => {
+        field.name = '';
+        field.email = '';
+        field.grade = '';
+        field.npm = '';
+    });
+    companyFields.name = '';
+    companyFields.address = '';
+    internFiles.coverLetter.file = null;
+    internFiles.coverLetter.fileName = '';
+    internFiles.responseLetter.file = null;
+    internFiles.responseLetter.fileName = '';
+};
+</script>
+
 <template>
     <div class="flex w-full justify-center">
         <div class="flex min-w-[546px] flex-col space-y-6">
@@ -107,75 +188,6 @@
         </div>
     </div>
 </template>
-
-<script setup lang="ts">
-import { PlusCircleIcon, XCircleIcon } from '@heroicons/vue/24/outline';
-import { CloudArrowUpIcon } from '@heroicons/vue/24/solid';
-import { ElMessage } from 'element-plus';
-import { reactive, ref } from 'vue';
-import createSubmissionService from './create-submission.service';
-import type { InternFiles, UploadHandlerParam } from './field.types';
-import FileUpload from './FileUpload.vue';
-import FormField from './FormField.vue';
-
-const uploadLoading = ref(false);
-const memberFields = reactive([{ name: '', npm: '', grade: '', email: '' }]);
-const companyFields = reactive({ name: '', address: '' });
-const internFiles = reactive<InternFiles>({
-    coverLetter: { file: null, fileName: '' },
-    responseLetter: { file: null, fileName: '' },
-});
-
-const onIncrementTotalMember = () => {
-    memberFields.push({ name: '', npm: '', grade: '', email: '' });
-};
-const onFindAndDeleteMember = (idx: number) => {
-    memberFields.splice(idx, 1);
-};
-const onUploadFile = (event: UploadHandlerParam) => {
-    internFiles[event.slug].file = new Blob([event.file[0]], { type: event.file[0].type });
-    internFiles[event.slug].fileName = event.file[0].name.replace(/\s+/g, '_');
-};
-const onSubmitSubmission = async () => {
-    try {
-        // declare vars
-        uploadLoading.value = true;
-        await createSubmissionService({
-            files: internFiles,
-            company: companyFields,
-            member: memberFields,
-        });
-        ElMessage({
-            message: 'Berkas berhasil terkirim...',
-            type: 'success',
-            showClose: true,
-        });
-        clearForm();
-    } catch (error: unknown) {
-        ElMessage({
-            message: 'Gagal menambahkan berkas, silahkan coba kembali...',
-            type: 'error',
-            showClose: true,
-        });
-    } finally {
-        uploadLoading.value = false;
-    }
-};
-const clearForm = () => {
-    memberFields.forEach((field) => {
-        field.name = '';
-        field.email = '';
-        field.grade = '';
-        field.npm = '';
-    });
-    companyFields.name = '';
-    companyFields.address = '';
-    internFiles.coverLetter.file = null;
-    internFiles.coverLetter.fileName = '';
-    internFiles.responseLetter.file = null;
-    internFiles.responseLetter.fileName = '';
-};
-</script>
 
 <style scoped lang="postcss">
 .el-input :deep(div) {
