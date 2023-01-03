@@ -1,18 +1,19 @@
 <script setup lang="ts">
 import checkReport from '@/services/report/check-report';
-import type { DocumentResult } from '@/services/report/check-report.types';
+import type { DocumentResult, Document } from '@/services/report/check-report.types';
 import { ClipboardDocumentCheckIcon } from '@heroicons/vue/24/outline';
 import { ElButton, ElFormItem, ElInput } from 'element-plus';
 import { Field, Form, type SubmissionHandler } from 'vee-validate';
 import { reactive, ref, watch } from 'vue';
 import * as Yup from 'yup';
+import ReportResult from './ReportResult.vue';
 
 const schema = Yup.object({
     npm: Yup.string().required('Data NPM masih kosong').length(11, 'NPM tidak valid'),
 });
 
 const repportLoading = ref(false);
-const foundData = reactive<DocumentResult>({
+const reportData = reactive<DocumentResult>({
     empty: null,
     document: null,
 });
@@ -20,13 +21,15 @@ const foundData = reactive<DocumentResult>({
 const onRepportSubmit: SubmissionHandler<{ npm: string }> = ({ npm }, actions) => {
     repportLoading.value = true;
     checkReport(npm).then(({ document, empty }) => {
-        foundData.document = document;
-        foundData.empty = empty;
+        reportData.document = document;
+        reportData.empty = empty;
     });
 
     repportLoading.value = false;
     actions.resetForm();
 };
+
+watch(reportData, () => console.log('data', reportData));
 </script>
 
 <template>
@@ -57,13 +60,23 @@ const onRepportSubmit: SubmissionHandler<{ npm: string }> = ({ npm }, actions) =
             <el-button
                 plain
                 :icon="ClipboardDocumentCheckIcon"
-                class="ease-transition mt-[24px] w-fit rounded-md !border-sky-500 !bg-white !text-sky-500 hover:!bg-sky-50"
+                class="ease-transition mt-4 w-fit rounded-md !border-sky-500 !bg-white !text-sky-500 hover:!bg-sky-50"
                 :loading="repportLoading"
                 native-type="submit"
             >
                 Cek Pengiriman Laporan
             </el-button>
         </Form>
+        <Transition
+            class="ease-transition"
+            enter-from-class="-translate-y-2 opacity-0"
+            leave-to-class="-translate-y-2 opacity-0"
+        >
+            <ReportResult
+                v-if="!reportData.empty && reportData.document"
+                :repport-data="(reportData.document as Document)"
+            />
+        </Transition>
     </section>
 </template>
 

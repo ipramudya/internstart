@@ -4,27 +4,23 @@ export interface DocumentResult {
 }
 
 export interface Document {
-    lead: string;
-    group: Group;
     partner: Partner;
+    group: { [key: string]: Group };
     npm: string;
+    lead: string;
 }
 
 export interface Group {
-    '0': The0;
-}
-
-export interface The0 {
     npm: string;
-    grade: string;
-    email: string;
     name: string;
+    email: string;
+    grade: string;
 }
 
 export interface Partner {
+    name: string;
     address: string;
     files: Files;
-    name: string;
 }
 
 export interface Files {
@@ -33,6 +29,6 @@ export interface Files {
 }
 
 export interface Letter {
-    url: string;
     fileName: string;
+    url: string;
 }
