@@ -5,7 +5,7 @@ const router = createRouter({
     routes: [
         {
             path: '/',
-            component: import('../layouts/InternstartLayout.vue'),
+            component: import('@/layouts/InternstartLayout.vue'),
             children: [
                 {
                     path: '',
@@ -28,6 +28,17 @@ const router = createRouter({
             path: '/admin',
             name: 'admin',
             component: import('@/views/Admin/Gate/GateView.vue'),
+        },
+        {
+            path: '/dashboard',
+            component: import('@/layouts/DashboardLayout.vue'),
+            children: [
+                {
+                    path: '',
+                    name: 'Dashboard',
+                    component: import('@/views/Admin/Dashboard/DashboardView.vue'),
+                },
+            ],
         },
         {
             path: '/:params(.*)',

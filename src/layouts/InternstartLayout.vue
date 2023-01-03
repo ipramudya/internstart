@@ -1,6 +1,6 @@
 <template>
     <div class="mx-auto max-w-7xl">
-        <Header />
+        <DefaultHeader />
         <main class="flex flex-col" :class="{ 'py-[160px]': !route.path.includes('admin') }">
             <RouterView />
         </main>
@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import Header from './Header.vue';
+import DefaultHeader from './Header/DefaultHeader.vue';
 import Footer from './Footer.vue';
 import { useRoute } from 'vue-router';
 
