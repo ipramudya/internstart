@@ -1,12 +1,12 @@
 import { db } from '@/lib/firebase';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
 import type { Document, DocumentResult } from './check-report.types';
 
 export default async function checkReport(npm: string): Promise<DocumentResult> {
-    const q = query(collection(db, 'students'), where('npm', '==', npm));
-    const result = await getDocs(q);
+    const docRef = doc(db, 'students', npm);
+    const docResult = await getDoc(docRef);
 
-    if (result.empty) {
+    if (!docResult.exists()) {
         return {
             empty: true,
             document: null,
@@ -14,7 +14,7 @@ export default async function checkReport(npm: string): Promise<DocumentResult> 
     } else {
         return {
             empty: false,
-            document: result.docs[0].data() as Document,
+            document: docResult.data() as Document,
         };
     }
 }

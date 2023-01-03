@@ -1,5 +1,5 @@
 import { db, storage } from '@/lib/firebase';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, setDoc, doc, getDoc } from 'firebase/firestore';
 import {
     getDownloadURL,
     ref as firebaseStorageRef,
@@ -49,23 +49,34 @@ export default async function addSubmission({ company, files, member }: AddSubmi
     });
     const downloadURL = await Promise.all<string>(beforeGetDownloadURL);
 
+    // create reference
+    const studentCollectionRef = collection(db, 'students');
+    const docRef = doc(db, 'students', member[0].npm);
+
+    // get existing data to check
+    const existingDoc = await getDoc(docRef);
+
     // store to firestore
-    await addDoc(collection(db, 'students'), {
-        lead: member[0].name,
-        npm: member[0].npm,
-        group: { ...member },
-        partner: {
-            ...company,
-            files: {
-                coverLetter: {
-                    fileName: files.coverLetter.fileName,
-                    url: downloadURL[0],
-                },
-                responseLetter: {
-                    fileName: files.responseLetter.fileName,
-                    url: downloadURL[1],
+    if (existingDoc.exists()) {
+        throw new Error('NPM telah digunakan');
+    } else {
+        await setDoc(doc(studentCollectionRef, member[0].npm), {
+            lead: member[0].name,
+            npm: member[0].npm,
+            group: { ...member },
+            partner: {
+                ...company,
+                files: {
+                    coverLetter: {
+                        fileName: files.coverLetter.fileName,
+                        url: downloadURL[0],
+                    },
+                    responseLetter: {
+                        fileName: files.responseLetter.fileName,
+                        url: downloadURL[1],
+                    },
                 },
             },
-        },
-    });
+        });
+    }
 }

@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { db } from '@/lib/firebase';
 import addSubmission from '@/services/submission/add-submission';
 import type { InternFiles, UploadHandlerParam } from '@/services/submission/add-submission.types';
+import { addDoc, collection, doc, getDoc, setDoc } from '@firebase/firestore';
 import { PlusCircleIcon, XCircleIcon } from '@heroicons/vue/24/outline';
 import { CloudArrowUpIcon } from '@heroicons/vue/24/solid';
 import { ElMessage } from 'element-plus';
@@ -51,11 +53,17 @@ const onSubmitSubmission = async () => {
         });
         clearForm();
     } catch (error: any) {
+        const errorChecker = (errorParam: any) => {
+            if (errorParam.inner) {
+                return error.inner[0].message;
+            } else if (error.message) {
+                return error.message;
+            } else {
+                return 'Gagal menambahkan berkas, silahkan coba kembali...';
+            }
+        };
         ElMessage({
-            message:
-                error.inner.length !== 0
-                    ? error.inner[0].message
-                    : 'Gagal menambahkan berkas, silahkan coba kembali...',
+            message: errorChecker(error),
             type: 'error',
             showClose: true,
         });

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { DocumentResult } from '@/services/report/check-report.types';
 import checkReport from '@/services/report/check-report';
+import type { DocumentResult } from '@/services/report/check-report.types';
 import { ClipboardDocumentCheckIcon } from '@heroicons/vue/24/outline';
-import { ElFormItem, ElInput, ElButton } from 'element-plus';
+import { ElButton, ElFormItem, ElInput } from 'element-plus';
 import { Field, Form, type SubmissionHandler } from 'vee-validate';
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import * as Yup from 'yup';
 
 const schema = Yup.object({
