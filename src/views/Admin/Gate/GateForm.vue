@@ -7,7 +7,7 @@ const schema = Yup.object({
     email: Yup.string().required('Email tidak boleh kosong').email('Email tidak valid'),
     password: Yup.string()
         .required('Kata sandi tidak boleh kosong')
-        .length(6, 'Kata sandi tidak boleh kurang dari 6 karakter'),
+        .min(6, 'Kata sandi tidak boleh kurang dari 6 karakter'),
 });
 
 const authLoading = ref(false);
