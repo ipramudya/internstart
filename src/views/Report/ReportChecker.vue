@@ -2,7 +2,7 @@
 import checkReport from '@/services/report/check-report';
 import type { DocumentResult, Document } from '@/services/report/check-report.types';
 import { ClipboardDocumentCheckIcon } from '@heroicons/vue/24/outline';
-import { ElButton, ElFormItem, ElInput } from 'element-plus';
+import { ElButton, ElFormItem, ElInput, ElMessage } from 'element-plus';
 import { Field, Form, type SubmissionHandler } from 'vee-validate';
 import { reactive, ref, watch } from 'vue';
 import * as Yup from 'yup';
@@ -29,7 +29,16 @@ const onRepportSubmit: SubmissionHandler<{ npm: string }> = ({ npm }, actions) =
     actions.resetForm();
 };
 
-watch(reportData, () => console.log('data', reportData));
+watch(reportData, () => {
+    if (reportData.empty) {
+        ElMessage({
+            message: 'Data yang sedang kamu cari tidak dapat ditemukan',
+            type: 'error',
+            showClose: true,
+            duration: 5000,
+        });
+    }
+});
 </script>
 
 <template>
@@ -49,7 +58,7 @@ watch(reportData, () => console.log('data', reportData));
                     class="min-w-[400px]"
                 >
                     <el-input
-                        placeholder="Masukan NPM"
+                        placeholder="Masukan NPM ketua kelompok..."
                         size="large"
                         :model-value="value"
                         @update:model-value="handleChange"
@@ -60,11 +69,11 @@ watch(reportData, () => console.log('data', reportData));
             <el-button
                 plain
                 :icon="ClipboardDocumentCheckIcon"
-                class="ease-transition mt-4 w-fit rounded-md !border-sky-500 !bg-white !text-sky-500 hover:!bg-sky-50"
+                class="ease-transition mt-4 w-fit rounded-md !border-sky-600 !bg-white !text-sky-600 hover:!bg-sky-50"
                 :loading="repportLoading"
                 native-type="submit"
             >
-                Cek Pengiriman Laporan
+                <span class="font-normal">Cek Pengajuan Laporan</span>
             </el-button>
         </Form>
         <Transition
