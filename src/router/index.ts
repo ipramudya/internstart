@@ -1,6 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import SubmissionView from '@/views/Submission/SubmissionView.vue';
-import LandingPage from '@/views/Landing/LandingView.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,12 +10,17 @@ const router = createRouter({
                 {
                     path: '',
                     name: 'landing',
-                    component: LandingPage,
+                    component: import('@/views/Landing/LandingView.vue'),
                 },
                 {
                     path: 'submission',
                     name: 'submission',
-                    component: SubmissionView,
+                    component: import('@/views/Submission/SubmissionView.vue'),
+                },
+                {
+                    path: 'repport',
+                    name: 'repport',
+                    component: import('@/views/Repport/RepportView.vue'),
                 },
             ],
         },

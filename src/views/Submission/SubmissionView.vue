@@ -7,5 +7,3 @@
 import SubmissionBanner from './SubmissionBanner.vue';
 import SubmissionForm from './Form/SubmissionForm.vue';
 </script>
-
-<style scoped></style>
