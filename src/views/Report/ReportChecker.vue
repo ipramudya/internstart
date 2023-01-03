@@ -1,17 +1,31 @@
 <script setup lang="ts">
-import { Form, Field, type SubmissionHandler } from 'vee-validate';
+import type { DocumentResult } from '@/services/check-report.types';
+import checkReport from '@/services/check-report';
 import { ClipboardDocumentCheckIcon } from '@heroicons/vue/24/outline';
+import { ElFormItem, ElInput, ElButton } from 'element-plus';
+import { Field, Form, type SubmissionHandler } from 'vee-validate';
+import { reactive, ref } from 'vue';
 import * as Yup from 'yup';
-import { ref } from 'vue';
 
 const schema = Yup.object({
     npm: Yup.string().required('Data NPM masih kosong').length(11, 'NPM tidak valid'),
 });
 
 const repportLoading = ref(false);
+const foundData = reactive<DocumentResult>({
+    empty: null,
+    document: null,
+});
 
-const onRepportSubmit: SubmissionHandler = (values, actions) => {
-    console.log(values);
+const onRepportSubmit: SubmissionHandler<{ npm: string }> = ({ npm }, actions) => {
+    repportLoading.value = true;
+    checkReport(npm).then(({ document, empty }) => {
+        foundData.document = document;
+        foundData.empty = empty;
+    });
+
+    repportLoading.value = false;
+    actions.resetForm();
 };
 </script>
 
@@ -19,7 +33,7 @@ const onRepportSubmit: SubmissionHandler = (values, actions) => {
     <section class="flex flex-col items-center">
         <Form
             :validation-schema="schema"
-            @submit="onRepportSubmit"
+            @submit="onRepportSubmit as any"
             as="el-form"
             label-position="top"
             class="flex flex-col items-center"
@@ -47,7 +61,7 @@ const onRepportSubmit: SubmissionHandler = (values, actions) => {
                 :loading="repportLoading"
                 native-type="submit"
             >
-                Ajukan Laporan
+                Cek Pengiriman Laporan
             </el-button>
         </Form>
     </section>

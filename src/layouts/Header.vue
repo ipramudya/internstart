@@ -14,7 +14,7 @@
                 <RouterLink to="/submission" exact-active-class="font-medium">
                     <p class="link">Pengajuan</p>
                 </RouterLink>
-                <RouterLink to="/repport" exact-active-class="font-medium">
+                <RouterLink to="/report" exact-active-class="font-medium">
                     <p class="link">Cek Pelaporan</p>
                 </RouterLink>
             </div>

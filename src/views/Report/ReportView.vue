@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import RepportBanner from './RepportBanner.vue';
-import RepportChecker from './RepportChecker.vue';
+import RepportBanner from './ReportBanner.vue';
+import RepportChecker from './ReportChecker.vue';
 </script>
 
 <template>
