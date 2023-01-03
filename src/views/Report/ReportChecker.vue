@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { DocumentResult } from '@/services/check-report.types';
-import checkReport from '@/services/check-report';
+import type { DocumentResult } from '@/services/report/check-report.types';
+import checkReport from '@/services/report/check-report';
 import { ClipboardDocumentCheckIcon } from '@heroicons/vue/24/outline';
 import { ElFormItem, ElInput, ElButton } from 'element-plus';
 import { Field, Form, type SubmissionHandler } from 'vee-validate';

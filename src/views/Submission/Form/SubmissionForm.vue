@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import addSubmission from '@/services/submission/add-submission';
+import type { InternFiles, UploadHandlerParam } from '@/services/submission/add-submission.types';
 import { PlusCircleIcon, XCircleIcon } from '@heroicons/vue/24/outline';
 import { CloudArrowUpIcon } from '@heroicons/vue/24/solid';
 import { ElMessage } from 'element-plus';
 import { reactive, ref } from 'vue';
-import createSubmissionService from './create-submission.service';
-import type { InternFiles, UploadHandlerParam } from './field.types';
 import FileUpload from './FileUpload.vue';
 import FormField from './FormField.vue';
 import schema from './schema-validation';
@@ -39,7 +39,7 @@ const onSubmitSubmission = async () => {
             { abortEarly: false }
         );
         uploadLoading.value = true;
-        await createSubmissionService({
+        await addSubmission({
             files: internFiles,
             company: companyFields,
             member: memberFields,

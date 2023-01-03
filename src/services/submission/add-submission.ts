@@ -6,15 +6,15 @@ import {
     uploadBytes,
     type UploadResult,
 } from 'firebase/storage';
+import type { InternFiles, Member, Company, UploadStorageRefs } from './add-submission.types';
 
-import type { Company, InternFiles, Member, UploadStorageRefs } from './field.types';
-
-type CreateSubmissionParams = {
+interface AddSubmissionParams {
     files: InternFiles;
     member: Member[];
     company: Company;
-};
-export default async function ({ files, company, member }: CreateSubmissionParams) {
+}
+
+export default async function addSubmission({ company, files, member }: AddSubmissionParams) {
     const uploadStorageRef: UploadStorageRefs = {
         coverLetterStorageRef: null as any,
         responseLetterStorageRef: null as any,
