@@ -5,7 +5,9 @@ import * as Yup from 'yup';
 
 const schema = Yup.object({
     email: Yup.string().required('Email tidak boleh kosong').email('Email tidak valid'),
-    password: Yup.string().required('Password tidak boleh kosong'),
+    password: Yup.string()
+        .required('Kata sandi tidak boleh kosong')
+        .length(6, 'Kata sandi tidak boleh kurang dari 6 karakter'),
 });
 
 const authLoading = ref(false);
@@ -79,4 +81,8 @@ const onLoginSubmit: SubmissionHandler<{ email: string; password: string }> = (
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.parent-shadow {
+    box-shadow: rgba(3, 105, 161, 0.2) 0px 7px 29px 0px;
+}
+</style>
