@@ -25,6 +25,11 @@ const router = createRouter({
             ],
         },
         {
+            path: '/admin',
+            name: 'admin',
+            component: import('@/views/Admin/Gate/GateView.vue'),
+        },
+        {
             path: '/:params(.*)',
             name: 'not-found',
             component: import('../views/NotFound.vue'),

@@ -19,13 +19,15 @@
                 </RouterLink>
             </div>
         </div>
-        <el-button
-            plain
-            class="ease-transition rounded-md border !border-sky-500 !text-sky-600 hover:!border-sky-400 hover:!text-sky-400"
-            :icon="ArrowRightOnRectangleIcon"
-        >
-            <span class="font-normal">Masuk sebagai admin</span>
-        </el-button>
+        <RouterLink to="admin">
+            <el-button
+                plain
+                class="ease-transition rounded-md border !border-sky-500 !text-sky-600 hover:!border-sky-400 hover:!text-sky-400"
+                :icon="ArrowRightOnRectangleIcon"
+            >
+                <span class="font-normal">Masuk sebagai admin</span>
+            </el-button>
+        </RouterLink>
     </header>
 </template>
 
