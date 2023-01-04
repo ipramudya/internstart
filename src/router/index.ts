@@ -1,3 +1,4 @@
+import { useUserStore } from '@/stores/user.store';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
@@ -35,7 +36,7 @@ const router = createRouter({
             children: [
                 {
                     path: '',
-                    name: 'Dashboard',
+                    name: 'dashboard',
                     component: import('@/views/Admin/Dashboard/DashboardView.vue'),
                 },
             ],
@@ -46,6 +47,19 @@ const router = createRouter({
             component: import('../views/NotFound.vue'),
         },
     ],
+});
+
+router.beforeEach((to, from, next) => {
+    const store = useUserStore();
+
+    if (to.path === '/admin' && store.user) {
+        return next('/dashboard');
+    }
+    if (to.path === '/dashboard' && !store.user) {
+        return next('/admin');
+    }
+
+    next();
 });
 
 export default router;

@@ -1,5 +1,5 @@
 import { db } from '@/lib/firebase';
-import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import type { Document, DocumentResult } from './check-report.types';
 
 export default async function checkReport(npm: string): Promise<DocumentResult> {

@@ -21,7 +21,7 @@ export default async function authLogin({ email, password }: AuthLoginParam) {
     } catch (error: any) {
         console.log('err', error);
         return {
-            user: '',
+            user: null,
             error: error.message,
         };
     }

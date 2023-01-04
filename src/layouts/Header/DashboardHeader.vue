@@ -3,8 +3,9 @@ import Logo from '@/assets/logo.svg';
 import authLogout from '@/services/admin/auth-logout';
 import { ElMessage, ElButton } from 'element-plus';
 import { ref } from 'vue';
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
 
+const router = useRouter();
 const logoutLoading = ref(false);
 
 const onLogout = async () => {
@@ -23,6 +24,7 @@ const onLogout = async () => {
             type: 'success',
             showClose: true,
         });
+        router.push('/admin');
     }
     logoutLoading.value = false;
 };

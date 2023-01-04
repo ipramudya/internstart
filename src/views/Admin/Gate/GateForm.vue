@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { auth } from '@/lib/firebase';
 import authLogin from '@/services/admin/auth-login';
 import { ElMessage } from 'element-plus';
-import { Form, Field, type SubmissionHandler } from 'vee-validate';
+import { Field, Form, type SubmissionHandler } from 'vee-validate';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import * as Yup from 'yup';
+import { useUserStore } from '@/stores/user.store';
 
 const schema = Yup.object({
     email: Yup.string().required('Email tidak boleh kosong').email('Email tidak valid'),
@@ -14,23 +15,24 @@ const schema = Yup.object({
 });
 
 const authLoading = ref(false);
+const route = useRouter();
+const userState = useUserStore();
 
-const onLoginSubmit: SubmissionHandler<{ email: string; password: string }> = async (
-    auth,
-    actions
-) => {
+const onLoginSubmit: SubmissionHandler<{ email: string; password: string }> = async (auth) => {
     authLoading.value = true;
     const result = await authLogin({ ...auth });
 
-    if (result.error) {
+    if (result.user) {
+        userState.setUser(result.user);
+        authLoading.value = false;
+        return route.push('/dashboard');
+    } else {
         return ElMessage({
             message: result.error,
             type: 'error',
             showClose: true,
         });
     }
-
-    authLoading.value = false;
 };
 </script>
 
