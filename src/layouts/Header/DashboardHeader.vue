@@ -1,5 +1,31 @@
 <script setup lang="ts">
 import Logo from '@/assets/logo.svg';
+import authLogout from '@/services/admin/auth-logout';
+import { ElMessage, ElButton } from 'element-plus';
+import { ref } from 'vue';
+import { RouterLink } from 'vue-router';
+
+const logoutLoading = ref(false);
+
+const onLogout = async () => {
+    logoutLoading.value = true;
+    const { error, message } = await authLogout();
+
+    if (error) {
+        ElMessage({
+            message: 'Gagal melakukan logout...',
+            type: 'error',
+            showClose: true,
+        });
+    } else {
+        ElMessage({
+            message,
+            type: 'success',
+            showClose: true,
+        });
+    }
+    logoutLoading.value = false;
+};
 </script>
 
 <template>
@@ -12,6 +38,7 @@ import Logo from '@/assets/logo.svg';
         </RouterLink>
         <el-button
             plain
+            @click="onLogout"
             class="ease-transition rounded-md border !border-rose-500 !text-rose-600 hover:!border-rose-400 hover:!text-rose-400"
         >
             <span class="font-normal">Keluar akun</span>

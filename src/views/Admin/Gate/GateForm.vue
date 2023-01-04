@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { auth } from '@/lib/firebase';
+import authLogin from '@/services/admin/auth-login';
+import { ElMessage } from 'element-plus';
 import { Form, Field, type SubmissionHandler } from 'vee-validate';
 import { ref } from 'vue';
 import * as Yup from 'yup';
@@ -12,11 +15,22 @@ const schema = Yup.object({
 
 const authLoading = ref(false);
 
-const onLoginSubmit: SubmissionHandler<{ email: string; password: string }> = (
-    { email, password },
+const onLoginSubmit: SubmissionHandler<{ email: string; password: string }> = async (
+    auth,
     actions
 ) => {
-    console.log('email', email);
+    authLoading.value = true;
+    const result = await authLogin({ ...auth });
+
+    if (result.error) {
+        return ElMessage({
+            message: result.error,
+            type: 'error',
+            showClose: true,
+        });
+    }
+
+    authLoading.value = false;
 };
 </script>
 
