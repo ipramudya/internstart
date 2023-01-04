@@ -1,14 +1,26 @@
 <script setup lang="ts">
 import { EllipsisHorizontalIcon } from '@heroicons/vue/24/outline';
-import staticData from './data.constant';
 import TableDetail from './TableDetail.vue';
-import { ref } from 'vue';
+import { ref, reactive, watch } from 'vue';
+import getAllInternshipDocs from '@/services/admin/get-all-internship-docs';
+import type { InternshipDocs } from '@/services/admin/internship.types';
 
 const isDetailModalOpen = ref(false);
+const displayOnDetail = reactive<{ value: null | InternshipDocs }>({ value: null });
+const { internshipDocs } = await getAllInternshipDocs();
+
+watch(isDetailModalOpen, () => {
+    if (!isDetailModalOpen.value) {
+        displayOnDetail.value = null;
+    }
+});
 </script>
 
 <template>
-    <TableDetail v-model="isDetailModalOpen" />
+    <TableDetail
+        v-model="isDetailModalOpen"
+        :detail-document="displayOnDetail.value as InternshipDocs"
+    />
     <section>
         <table class="w-full">
             <thead class="border-b border-slate-200">
@@ -22,20 +34,38 @@ const isDetailModalOpen = ref(false);
                 </tr>
             </thead>
             <tbody class="text-neutral-600">
-                <tr v-for="({ email, name, npm, partner }, idx) in staticData" :key="npm">
+                <tr v-for="({ lead, group, npm, partner }, idx) in internshipDocs" :key="npm">
                     <td>{{ idx + 1 }}</td>
                     <td>
                         <div class="flex flex-col space-y-1">
-                            <p>{{ name }}</p>
+                            <p>{{ lead }}</p>
                             <p class="text-sm font-normal">{{ npm }}</p>
                         </div>
                     </td>
-                    <td>{{ partner }}</td>
-                    <td>{{ email }}</td>
-                    <td class="min-w-[100px]">
-                        <div class="flex items-center">
-                            <div class="mr-2 h-2 w-2 rounded-full bg-emerald-600" />
-                            <span class="text-sm">Disetujui</span>
+                    <td>
+                        <div class="flex flex-col space-y-1">
+                            <p>{{ partner.name }}</p>
+                            <p class="max-w-[300px] truncate text-sm font-normal">
+                                {{ partner.address }}
+                            </p>
+                        </div>
+                    </td>
+                    <td>
+                        <p class="max-w-[200px] truncate">{{ group[0].email }}</p>
+                    </td>
+                    <td>
+                        <div class="flex min-w-[150px] items-center">
+                            <div
+                                class="mr-2 h-2 w-2 rounded-full bg-emerald-600"
+                                :class="{
+                                    'bg-slate-600': !partner.approval,
+                                    'bg-emerald-600': partner?.approval === 'Disetujui',
+                                    'bg-rose-600': partner?.approval === 'Ditolak',
+                                }"
+                            />
+                            <span class="text-sm">{{
+                                !partner?.approval ? 'Belum Disetujui' : partner.approval
+                            }}</span>
                         </div>
                     </td>
                     <td>
@@ -47,7 +77,17 @@ const isDetailModalOpen = ref(false);
                                 <template #dropdown>
                                     <el-dropdown-menu class="ddown">
                                         <el-dropdown-item
-                                            @click="() => (isDetailModalOpen = !isDetailModalOpen)"
+                                            @click="
+                                                () => {
+                                                    isDetailModalOpen = !isDetailModalOpen;
+                                                    displayOnDetail.value = {
+                                                        partner,
+                                                        group,
+                                                        lead,
+                                                        npm,
+                                                    };
+                                                }
+                                            "
                                             >Detail</el-dropdown-item
                                         >
                                         <el-dropdown-item class="danger"

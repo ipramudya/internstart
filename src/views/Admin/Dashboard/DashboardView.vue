@@ -19,7 +19,10 @@ import DashboardTable from './DashboardTable.vue';
             />
         </div>
     </section>
-    <DashboardTable />
+    <Suspense>
+        <DashboardTable />
+        <template #fallback> Loading... </template>
+    </Suspense>
 </template>
 
 <style scoped>
