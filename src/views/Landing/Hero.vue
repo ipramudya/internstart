@@ -20,14 +20,16 @@
                         Ajukan Laporan
                     </el-button>
                 </router-link>
-                <el-button
-                    plain
-                    size="large"
-                    :icon="ClipboardDocumentCheckIcon"
-                    class="ease-transition rounded-md border !border-neutral-300 !text-neutral-700 hover:!border-sky-500 hover:!bg-sky-50 hover:!text-sky-500"
-                >
-                    Cek Laporan Magang
-                </el-button>
+                <router-link to="report">
+                    <el-button
+                        plain
+                        size="large"
+                        :icon="ClipboardDocumentCheckIcon"
+                        class="ease-transition rounded-md border !border-neutral-300 !text-neutral-700 hover:!border-sky-500 hover:!bg-sky-50 hover:!text-sky-500"
+                    >
+                        Cek Laporan Magang
+                    </el-button>
+                </router-link>
             </div>
         </div>
     </article>
