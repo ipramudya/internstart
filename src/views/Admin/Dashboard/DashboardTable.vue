@@ -1,9 +1,14 @@
 <script setup lang="ts">
-import { EllipsisVerticalIcon } from '@heroicons/vue/24/outline';
+import { EllipsisHorizontalIcon } from '@heroicons/vue/24/outline';
 import staticData from './data.constant';
+import TableDetail from './TableDetail.vue';
+import { ref } from 'vue';
+
+const isDetailModalOpen = ref(false);
 </script>
 
 <template>
+    <TableDetail v-model="isDetailModalOpen" />
     <section>
         <table class="w-full">
             <thead class="border-b border-slate-200">
@@ -22,22 +27,32 @@ import staticData from './data.constant';
                     <td>
                         <div class="flex flex-col space-y-1">
                             <p>{{ name }}</p>
-                            <p class="text-sm">{{ npm }}</p>
+                            <p class="text-sm font-normal">{{ npm }}</p>
                         </div>
                     </td>
                     <td>{{ partner }}</td>
                     <td>{{ email }}</td>
-                    <td class="min-w-[100px]">Disetujui</td>
+                    <td class="min-w-[100px]">
+                        <div class="flex items-center">
+                            <div class="mr-2 h-2 w-2 rounded-full bg-emerald-600" />
+                            <span class="text-sm">Disetujui</span>
+                        </div>
+                    </td>
                     <td>
                         <div class="flex items-center justify-center">
                             <el-dropdown trigger="click">
                                 <button class="ease-transition p-2 hover:text-neutral-800">
-                                    <EllipsisVerticalIcon class="h-5 w-5" />
+                                    <EllipsisHorizontalIcon class="h-5 w-5" />
                                 </button>
                                 <template #dropdown>
                                     <el-dropdown-menu>
-                                        <el-dropdown-item>Detail</el-dropdown-item>
-                                        <el-dropdown-item>Setujui</el-dropdown-item>
+                                        <el-dropdown-item
+                                            @click="() => (isDetailModalOpen = !isDetailModalOpen)"
+                                            >Detail</el-dropdown-item
+                                        >
+                                        <el-dropdown-item>Tolak Ajuan</el-dropdown-item>
+                                        <el-dropdown-item>Batalkan Approval</el-dropdown-item>
+                                        <el-dropdown-item>Hapus</el-dropdown-item>
                                     </el-dropdown-menu>
                                 </template>
                             </el-dropdown>
@@ -54,10 +69,10 @@ tbody {
     @apply divide-y divide-slate-200;
 }
 tbody :deep(tr) {
-    @apply ease-transition hover:!bg-slate-50;
+    @apply ease-transition font-medium text-neutral-600 hover:!bg-slate-50;
 }
 tr :deep(th) {
-    @apply py-3 font-medium text-neutral-800;
+    @apply py-3 font-normal text-neutral-800;
 }
 td {
     @apply py-2;

@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { db } from '@/lib/firebase';
 import addSubmission from '@/services/submission/add-submission';
 import type { InternFiles, UploadHandlerParam } from '@/services/submission/add-submission.types';
-import { addDoc, collection, doc, getDoc, setDoc } from '@firebase/firestore';
 import { PlusCircleIcon, XCircleIcon } from '@heroicons/vue/24/outline';
 import { CloudArrowUpIcon } from '@heroicons/vue/24/solid';
 import { ElMessage } from 'element-plus';
