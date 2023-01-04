@@ -5,7 +5,7 @@ import DashboardHeader from './Header/DashboardHeader.vue';
 <template>
     <div class="mx-auto max-w-7xl">
         <DashboardHeader />
-        <main class="flex flex-col">
+        <main class="flex flex-col py-[80px]">
             <RouterView />
         </main>
         <Footer />

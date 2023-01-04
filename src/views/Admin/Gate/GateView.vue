@@ -17,7 +17,7 @@ import { RouterLink } from 'vue-router';
                 <p class="mt-4">
                     Silahkan masukkan Email dan Password yang telah terdaftar untuk masuk
                     <br />
-                    ke halaman dashboard website Internsheep
+                    ke halaman dashboard website Internstart
                 </p>
             </div>
         </div>

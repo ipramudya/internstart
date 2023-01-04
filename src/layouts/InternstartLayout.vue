@@ -1,7 +1,7 @@
 <template>
     <div class="mx-auto max-w-7xl">
         <DefaultHeader />
-        <main class="flex flex-col" :class="{ 'py-[160px]': !route.path.includes('admin') }">
+        <main class="flex flex-col py-[160px]">
             <RouterView />
         </main>
         <Footer />
