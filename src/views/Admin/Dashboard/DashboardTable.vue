@@ -45,14 +45,18 @@ const isDetailModalOpen = ref(false);
                                     <EllipsisHorizontalIcon class="h-5 w-5" />
                                 </button>
                                 <template #dropdown>
-                                    <el-dropdown-menu>
+                                    <el-dropdown-menu class="ddown">
                                         <el-dropdown-item
                                             @click="() => (isDetailModalOpen = !isDetailModalOpen)"
                                             >Detail</el-dropdown-item
                                         >
-                                        <el-dropdown-item>Tolak Ajuan</el-dropdown-item>
-                                        <el-dropdown-item>Batalkan Approval</el-dropdown-item>
-                                        <el-dropdown-item>Hapus</el-dropdown-item>
+                                        <el-dropdown-item class="danger"
+                                            >Tolak Ajuan</el-dropdown-item
+                                        >
+                                        <el-dropdown-item class="danger"
+                                            >Batalkan Approval</el-dropdown-item
+                                        >
+                                        <el-dropdown-item class="danger">Hapus</el-dropdown-item>
                                     </el-dropdown-menu>
                                 </template>
                             </el-dropdown>
@@ -84,5 +88,12 @@ td:first-child {
 th:last-child,
 td:last-child {
     @apply pr-3;
+}
+.ddown :deep(.el-dropdown-menu__item) {
+    @apply ease-transition focus:!bg-slate-200 focus:text-neutral-800;
+}
+
+.ddown :deep(.danger) {
+    @apply focus:!bg-rose-200 focus:text-rose-800;
 }
 </style>
