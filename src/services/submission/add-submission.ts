@@ -1,12 +1,12 @@
 import { db, storage } from '@/lib/firebase';
-import { addDoc, collection, setDoc, doc, getDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, setDoc } from 'firebase/firestore';
 import {
     getDownloadURL,
     ref as firebaseStorageRef,
     uploadBytes,
     type UploadResult,
 } from 'firebase/storage';
-import type { InternFiles, Member, Company, UploadStorageRefs } from './add-submission.types';
+import type { Company, InternFiles, Member, UploadStorageRefs } from './add-submission.types';
 
 interface AddSubmissionParams {
     files: InternFiles;

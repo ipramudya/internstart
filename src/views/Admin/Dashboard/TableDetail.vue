@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import approveDocs from '@/services/admin/approve-docs';
 import type { InternshipDocs } from '@/services/admin/internship.types';
 import { EllipsisVerticalIcon } from '@heroicons/vue/24/outline';
 import { CheckBadgeIcon } from '@heroicons/vue/24/solid';
+import { ElMessage } from 'element-plus';
 import { computed, ref, watch } from 'vue';
 
 const emit = defineEmits(['update:modelValue']);
@@ -18,6 +20,7 @@ const value = computed({
     },
 });
 
+const loadingApproval = ref(false);
 const activeNames = ref([]);
 const computedGroup = computed(() => {
     const newGroup = Object.values(props.detailDocument.group);
@@ -38,6 +41,18 @@ watch(props, () => {
         activeNames.value = [];
     }
 });
+
+const onSubmitApproval = async () => {
+    loadingApproval.value = true;
+    const { error, success } = await approveDocs(props.detailDocument.npm);
+    loadingApproval.value = false;
+
+    ElMessage({
+        message: error || success,
+        type: !error ? 'success' : 'error',
+        showClose: true,
+    });
+};
 </script>
 
 <template>
@@ -152,12 +167,16 @@ watch(props, () => {
                         Tutup
                     </button>
                     <div class="space-x-2">
-                        <button
-                            class="btn items-start bg-emerald-600 text-white hover:bg-opacity-80"
+                        <el-button
+                            plain
+                            class="btn items-start !border-none bg-emerald-600 !text-white hover:!bg-emerald-600 hover:!bg-opacity-80"
+                            @click="onSubmitApproval"
+                            size="large"
+                            :icon="CheckBadgeIcon"
+                            :loading="loadingApproval"
                         >
-                            <CheckBadgeIcon class="mt-1 h-4 w-4" />
                             <span class="h-fit">Approve pengajuan</span>
-                        </button>
+                        </el-button>
                     </div>
                 </div>
             </div>
@@ -168,6 +187,9 @@ watch(props, () => {
 <style scoped lang="postcss">
 .btn {
     @apply ease-transition flex items-center space-x-2 rounded-md px-3 py-[6px];
+}
+.el-button :deep(.el-icon) {
+    @apply text-[20px];
 }
 .collapsed :deep(.el-collapse-item__header) {
     @apply text-sm font-normal text-neutral-600;
