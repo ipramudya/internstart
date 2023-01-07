@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import approveDocs from '@/services/admin/approve-docs';
+import approveDocs from '@/services/admin/approval';
 import type { InternshipDocs } from '@/services/admin/internship.types';
 import { EllipsisVerticalIcon } from '@heroicons/vue/24/outline';
 import { CheckBadgeIcon } from '@heroicons/vue/24/solid';
@@ -53,7 +53,10 @@ const displayMessage = (message: string, variant: 'error' | 'success') => {
 
 const onSubmitApproval = async () => {
     loadingApproval.value = true;
-    const { error, success } = await approveDocs(props.detailDocument.npm);
+    const { error, success } = await approveDocs({
+        npm: props.detailDocument.npm,
+        variant: 'approve',
+    });
     loadingApproval.value = false;
     displayMessage(error || success, !error ? 'success' : 'error');
 };

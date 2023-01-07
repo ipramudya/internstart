@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import approveDocs from '@/services/admin/approval';
 import cancelApproval from '@/services/admin/cancel-approval';
 import getAllInternshipDocs from '@/services/admin/get-all-internship-docs';
 import type { InternshipDocs } from '@/services/admin/internship.types';
@@ -8,7 +9,6 @@ import { onUnmounted, reactive, ref, watch } from 'vue';
 import DashboardTableSkeleton from './DashboardTableSkeleton.vue';
 import TableDetail from './TableDetail.vue';
 
-const loadingCalcelApproval = ref(false);
 const isDetailModalOpen = ref(false);
 const displayOnDetail = reactive<{ value: null | InternshipDocs }>({ value: null });
 const { internshipDocs, loading, unsubscribe } = getAllInternshipDocs();
@@ -29,9 +29,11 @@ const displayMessage = (message: string, variant: 'error' | 'success') => {
 };
 
 const onCancelApproval = async (npm: string) => {
-    loadingCalcelApproval.value = true;
     const { error, success } = await cancelApproval(npm);
-    loadingCalcelApproval.value = false;
+    displayMessage(error || success, !error ? 'success' : 'error');
+};
+const onRefuseApproval = async (npm: string) => {
+    const { error, success } = await approveDocs({ npm, variant: 'refuse' });
     displayMessage(error || success, !error ? 'success' : 'error');
 };
 </script>
@@ -114,16 +116,15 @@ const onCancelApproval = async (npm: string) => {
                                                 "
                                                 >Detail</el-dropdown-item
                                             >
-                                            <el-dropdown-item class="danger"
+                                            <el-dropdown-item
+                                                class="danger"
+                                                @click="onRefuseApproval(npm)"
                                                 >Tolak Ajuan</el-dropdown-item
                                             >
                                             <el-dropdown-item
                                                 class="danger"
                                                 @click="onCancelApproval(npm)"
                                                 >Batalkan Approval</el-dropdown-item
-                                            >
-                                            <el-dropdown-item class="danger"
-                                                >Hapus</el-dropdown-item
                                             >
                                         </el-dropdown-menu>
                                     </template>
