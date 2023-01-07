@@ -9,11 +9,8 @@
 </template>
 
 <script setup lang="ts">
-import DefaultHeader from './Header/DefaultHeader.vue';
 import Footer from './Footer.vue';
-import { useRoute } from 'vue-router';
-
-const route = useRoute();
+import DefaultHeader from './Header/DefaultHeader.vue';
 </script>
 
 <style scoped>
