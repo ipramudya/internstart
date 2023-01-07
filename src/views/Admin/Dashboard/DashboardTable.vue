@@ -1,22 +1,39 @@
 <script setup lang="ts">
+import cancelApproval from '@/services/admin/cancel-approval';
 import getAllInternshipDocs from '@/services/admin/get-all-internship-docs';
 import type { InternshipDocs } from '@/services/admin/internship.types';
 import { EllipsisHorizontalIcon } from '@heroicons/vue/24/outline';
+import { ElMessage } from 'element-plus';
 import { onUnmounted, reactive, ref, watch } from 'vue';
 import DashboardTableSkeleton from './DashboardTableSkeleton.vue';
 import TableDetail from './TableDetail.vue';
 
+const loadingCalcelApproval = ref(false);
 const isDetailModalOpen = ref(false);
 const displayOnDetail = reactive<{ value: null | InternshipDocs }>({ value: null });
 const { internshipDocs, loading, unsubscribe } = getAllInternshipDocs();
 
+onUnmounted(() => unsubscribe());
 watch(isDetailModalOpen, () => {
     if (!isDetailModalOpen.value) {
         displayOnDetail.value = null;
     }
 });
 
-onUnmounted(() => unsubscribe());
+const displayMessage = (message: string, variant: 'error' | 'success') => {
+    ElMessage({
+        message,
+        type: variant,
+        showClose: true,
+    });
+};
+
+const onCancelApproval = async (npm: string) => {
+    loadingCalcelApproval.value = true;
+    const { error, success } = await cancelApproval(npm);
+    loadingCalcelApproval.value = false;
+    displayMessage(error || success, !error ? 'success' : 'error');
+};
 </script>
 
 <template>
@@ -100,7 +117,9 @@ onUnmounted(() => unsubscribe());
                                             <el-dropdown-item class="danger"
                                                 >Tolak Ajuan</el-dropdown-item
                                             >
-                                            <el-dropdown-item class="danger"
+                                            <el-dropdown-item
+                                                class="danger"
+                                                @click="onCancelApproval(npm)"
                                                 >Batalkan Approval</el-dropdown-item
                                             >
                                             <el-dropdown-item class="danger"

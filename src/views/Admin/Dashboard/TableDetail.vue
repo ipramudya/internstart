@@ -21,6 +21,7 @@ const value = computed({
 });
 
 const loadingApproval = ref(false);
+
 const activeNames = ref([]);
 const computedGroup = computed(() => {
     const newGroup = Object.values(props.detailDocument.group);
@@ -42,16 +43,19 @@ watch(props, () => {
     }
 });
 
+const displayMessage = (message: string, variant: 'error' | 'success') => {
+    ElMessage({
+        message,
+        type: variant,
+        showClose: true,
+    });
+};
+
 const onSubmitApproval = async () => {
     loadingApproval.value = true;
     const { error, success } = await approveDocs(props.detailDocument.npm);
     loadingApproval.value = false;
-
-    ElMessage({
-        message: error || success,
-        type: !error ? 'success' : 'error',
-        showClose: true,
-    });
+    displayMessage(error || success, !error ? 'success' : 'error');
 };
 </script>
 

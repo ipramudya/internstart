@@ -10,12 +10,14 @@ export default function getAllInternshipDocs() {
     const q = query(collection(db, 'students'));
     loading.value = true;
     const unsubscribe = onSnapshot(q, (docs) => {
-        docs.docChanges().forEach((change) => {
-            const existingDoc = internshipDocs.find((doc) => doc.npm === change.doc.data().npm);
+        docs.forEach((doc) => {
+            const existingDoc = internshipDocs.find(
+                (internshipDoc) => internshipDoc.npm === doc.data().npm
+            );
             if (existingDoc) {
-                return (existingDoc.partner.approval = change.doc.data().partner.approval);
+                return (existingDoc.partner.approval = doc.data().partner.approval);
             }
-            internshipDocs.push(change.doc.data() as any);
+            internshipDocs.push(doc.data() as any);
         });
         loading.value = false;
     });
