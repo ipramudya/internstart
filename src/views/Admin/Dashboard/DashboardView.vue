@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline';
 import DashboardTable from './DashboardTable.vue';
-import DashboardTableSkeleton from './DashboardTableSkeleton.vue';
 </script>
 
 <template>
@@ -21,10 +20,7 @@ import DashboardTableSkeleton from './DashboardTableSkeleton.vue';
         </div>
     </section>
 
-    <Suspense>
-        <DashboardTable />
-        <template #fallback> <DashboardTableSkeleton /> </template>
-    </Suspense>
+    <DashboardTable />
 </template>
 
 <style scoped>
