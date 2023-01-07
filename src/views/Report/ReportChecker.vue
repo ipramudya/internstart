@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import checkReport from '@/services/report/check-report';
-import type { DocumentResult, Document } from '@/services/report/check-report.types';
+import type { Document, DocumentResult } from '@/services/report/check-report.types';
 import { ClipboardDocumentCheckIcon } from '@heroicons/vue/24/outline';
 import { ElButton, ElFormItem, ElInput, ElMessage } from 'element-plus';
 import { Field, Form, type SubmissionHandler } from 'vee-validate';
@@ -30,6 +30,7 @@ const onRepportSubmit: SubmissionHandler<{ npm: string }> = ({ npm }, actions) =
 };
 
 watch(reportData, () => {
+    console.log('report', reportData);
     if (reportData.empty) {
         ElMessage({
             message: 'Data yang sedang kamu cari tidak dapat ditemukan',

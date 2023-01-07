@@ -1,8 +1,28 @@
 <script setup lang="ts">
 import type { Document } from '@/services/report/check-report.types';
-defineProps<{
+import { computed } from 'vue';
+const props = defineProps<{
     repportData: Document;
 }>();
+
+const reportMessage = computed(() => {
+    if (!props.repportData.partner?.approval) {
+        return {
+            message: 'Menunggu Persetujuan',
+            style: 'border-amber-500 text-amber-500',
+        };
+    } else if (props.repportData.partner.approval === 'Disetujui') {
+        return {
+            message: 'Ajuan berhasil disetujui',
+            style: 'border-emerald-500 text-emerald-500',
+        };
+    } else {
+        return {
+            message: 'Ajuan ditolak',
+            style: 'border-rose-500 text-rose-500',
+        };
+    }
+});
 </script>
 
 <template>
@@ -12,9 +32,11 @@ defineProps<{
         <div class="flex flex-col items-center">
             <h2 class="mb-3 text-2xl font-bold text-neutral-800">Data Pelaporan Kelompok</h2>
             <span
-                class="mb-6 rounded-full border border-amber-500 bg-white px-2 py-1 text-xs text-amber-500"
-                >Menunggu Persetujuan</span
+                class="b mb-6 rounded-full border bg-white px-2 py-1 text-xs"
+                :class="reportMessage.style"
             >
+                {{ reportMessage.message }}
+            </span>
             <div class="flex flex-col space-y-2">
                 <div class="data-wrapper">
                     <h3 class="data-title">Nama Ketua Kelompok</h3>
@@ -23,17 +45,15 @@ defineProps<{
                         {{ repportData.lead }}
                     </p>
                 </div>
-                <div
-                    v-for="(member, idx) in repportData.group"
-                    class="data-wrapper"
-                    :key="member.npm"
-                >
-                    <h3 class="data-title">Nama Anggota {{ +idx + 1 }}</h3>
-                    <p class="data-value">
-                        <span class="pr-1">:</span>
-                        {{ member.name }}
-                    </p>
-                </div>
+                <template v-for="(member, idx) in repportData.group" :key="member.npm">
+                    <div v-if="+idx !== 0" class="data-wrapper">
+                        <h3 class="data-title">Nama Anggota {{ +idx }}</h3>
+                        <p class="data-value">
+                            <span class="pr-1">:</span>
+                            {{ member.name }}
+                        </p>
+                    </div>
+                </template>
                 <div class="data-wrapper">
                     <h3 class="data-title">Nama Perusahaan</h3>
                     <p class="data-value">
@@ -45,7 +65,7 @@ defineProps<{
                     <h3 class="data-title">Alamat Perusahaan</h3>
                     <p class="data-value">
                         <span class="pr-1">:</span>
-                        {{ repportData.partner.name }}
+                        {{ repportData.partner.address }}
                     </p>
                 </div>
             </div>

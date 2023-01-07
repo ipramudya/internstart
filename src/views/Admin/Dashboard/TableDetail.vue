@@ -100,7 +100,7 @@ const onSubmitApproval = async () => {
                 </div>
                 <div class="flex justify-between">
                     <p class="text-sm text-neutral-600">Alamat Perusahaan</p>
-                    <p class="max-w-[200px] truncate font-medium text-neutral-800">
+                    <p class="max-w-[200px] text-right font-medium text-neutral-800">
                         {{ detailDocument.partner.address }}
                     </p>
                 </div>

@@ -21,6 +21,7 @@ export interface Partner {
     name: string;
     address: string;
     files: Files;
+    approval?: 'Disetujui' | 'Ditolak';
 }
 
 export interface Files {
