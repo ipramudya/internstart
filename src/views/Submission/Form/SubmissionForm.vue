@@ -168,13 +168,11 @@ const clearForm = () => {
                         input-type="textarea"
                     />
                     <FileUpload
-                        :file-ref="internFiles.coverLetter"
                         label="Unggah surat pengantar"
                         @file-change="onUploadFile"
                         id="coverLetter"
                     />
                     <FileUpload
-                        :file-ref="internFiles.responseLetter"
                         label="Unggah surat balasan"
                         @file-change="onUploadFile"
                         id="responseLetter"

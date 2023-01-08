@@ -16,7 +16,6 @@
                 <input
                     type="file"
                     :id="id"
-                    :ref="fileRef"
                     class="absolute inset-0 h-0 w-0"
                     @change="(e) => {
                         $emit('fileChange', {file: (e.target as any).files, slug: id}, )
@@ -30,7 +29,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-defineProps(['fileRef', 'placeholder', 'label', 'id']);
+defineProps(['label', 'id']);
 defineEmits(['fileChange']);
 
 const placeholder = ref(null);
